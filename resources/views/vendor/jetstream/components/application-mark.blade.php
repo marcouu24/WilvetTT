@@ -1,0 +1,1 @@
+<img src="{{ asset('/images/wilvet.jpeg')}}" style="width:60px;" alt="">
