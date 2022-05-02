@@ -15,7 +15,7 @@ use App\http\Controllers\ClientesController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
@@ -26,7 +26,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('tablero');
     })->name('dashboard');
 });
 
