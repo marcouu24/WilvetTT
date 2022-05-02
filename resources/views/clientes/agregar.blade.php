@@ -13,7 +13,7 @@
     
 
     
-    <div class="card mt-2 ">
+    <div class="card mt-3 ">
         <div class="card-body">
             <table id="table_id" class="yajra-datatable js-tabla-datos display row-border nowrap stripe hover " style="width:100%">
                 <thead>

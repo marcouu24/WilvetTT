@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -35,3 +37,6 @@ Route::post('/clientes/guardar', [App\Http\Controllers\ClientesController::class
 Route::get('/clientes/listar', [App\Http\Controllers\ClientesController::class, 'listar'] )->name('clientes.listar');
 Route::delete('/clientes/eliminar/{id}', [App\Http\Controllers\ClientesController::class, 'eliminarCliente'])->name('clientes.eliminar');
 Route::get('/clientes/editar/{id}', [App\Http\Controllers\ClientesController::class, 'editarCliente'] )->name('clientes.editar');
+
+
+Route::get('/tablero', [App\Http\Controllers\ClientesController::class, 'tablero'] )->name('tablero');

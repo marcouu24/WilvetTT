@@ -8,6 +8,13 @@ use App\Models\Cliente;
 use DataTables;
 class ClientesController extends Controller
 {
+
+    public function tablero(Request $request)
+    {
+        return view('tablero');        
+    }
+
+
     public function index(Request $request)
     {
         return view('clientes.agregar');        
