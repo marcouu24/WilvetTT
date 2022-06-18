@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Ajuste extends Model
+{
+    use HasFactory;
+    protected $table = 'ajustes';
+    protected $fillable = [
+        'motivo',
+        'fecha_ajuste',
+        'stock',
+        'id_usuario',
+        'id_producto'
+
+    ];
+
+    public function producto(){
+        return $this->belongsTo(Producto::class, 'id_producto', 'id');
+    }
+
+    public function usuario(){
+        return $this->belongsTo(User::class, 'id_usuario', 'id');
+    }
+}
