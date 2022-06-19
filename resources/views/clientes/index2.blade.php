@@ -22,7 +22,7 @@
         <table class="table table-bordered yajra-datatable js-tabla-datos">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>IDD</th>
                     <th>Nombre</th>
                     <th>Primer Apellido</th>
                     <th>Segundo Apellido</th>

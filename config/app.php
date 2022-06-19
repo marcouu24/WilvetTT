@@ -198,7 +198,7 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         
 
     ],
@@ -215,7 +215,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-       
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+
+
     ])->toArray(),
 
     

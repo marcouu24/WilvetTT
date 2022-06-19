@@ -38,8 +38,10 @@ class ClientesController extends Controller
         return view('clientes.editar',compact('cliente'));
     }
 
-    public function guardarCliente(ClientesRequest $request)
 
+
+    
+    public function guardarCliente(ClientesRequest $request)
     {
       
         try{
