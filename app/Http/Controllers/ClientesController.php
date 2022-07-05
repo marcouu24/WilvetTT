@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientesRequest;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\Producto;
 
 use DataTables;
 class ClientesController extends Controller
 {
 
-    public function tablero(Request $request)
-    {
-        return view('tablero');        
-    }
+
 
 
     public function index(Request $request)
@@ -82,7 +80,7 @@ class ClientesController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($cliente){
                
-                    $actionBtn = '<a href="'.route('clientes.editar',$cliente->rut).'" class="edit btn btn-success btn-sm ">Editar</a> 
+                    $actionBtn = '<a href="'.route('clientes.editar',$cliente->rut).'" class="edit btn btn-warning btn-sm ">Editar</a> 
                     
                     <form action="'.route('clientes.eliminar',$cliente->rut).'" class="d-inline js-form-eliminar" method="post">
                         <input type="hidden" name="_token" value="'.csrf_token().'">

@@ -65,5 +65,38 @@ Route::get('/servicios/editar/{id}', [App\Http\Controllers\ServiciosController::
 Route::delete('/servicios/eliminar/{id}', [App\Http\Controllers\ServiciosController::class, 'eliminarServicio'])->name('servicios.eliminar');
 
 
+Route::get('/productos', [App\Http\Controllers\ProductosController::class, 'index'] )->name('productos.index');
+Route::get('/productos/listar', [App\Http\Controllers\ProductosController::class, 'listar'] )->name('productos.listar');
+Route::get('/productos/crear', [App\Http\Controllers\ProductosController::class, 'crearProducto'] )->name('productos.crear');
+Route::post('/productos/guardar', [App\Http\Controllers\ProductosController::class, 'guardarProducto'])->name('productos.guardar');
+Route::get('/productos/editar/{id}', [App\Http\Controllers\ProductosController::class, 'editarProducto'] )->name('productos.editar');
+Route::delete('/productos/eliminar/{id}', [App\Http\Controllers\ProductosController::class, 'eliminarProducto'])->name('productos.eliminar');
+Route::post('/productos/reportePDF', [App\Http\Controllers\ProductosController::class, 'reportePDF'] )->name('productos.reportePDF');
 
-Route::get('/tablero', [App\Http\Controllers\ClientesController::class, 'tablero'] )->name('tablero');
+
+Route::get('/compras', [App\Http\Controllers\ComprasController::class, 'index'] )->name('compras.index');
+Route::get('/compras/listar', [App\Http\Controllers\ComprasController::class, 'listar'] )->name('compras.listar');
+Route::get('/compras/crear', [App\Http\Controllers\ComprasController::class, 'crearCompra'] )->name('compras.crear');
+Route::post('/compras/guardar', [App\Http\Controllers\ComprasController::class, 'guardarCompra'])->name('compras.guardar');
+Route::get('/compras/editar/{id}', [App\Http\Controllers\ComprasController::class, 'editarCompra'] )->name('compras.editar');
+Route::delete('/compras/eliminar/{id}', [App\Http\Controllers\ComprasController::class, 'eliminarCompra'])->name('compras.eliminar');
+Route::get('/compras/pdf/{id}', [App\Http\Controllers\ComprasController::class, 'reportePDF'])->name('compras.reportePDF');
+
+
+Route::get('/ventas', [App\Http\Controllers\VentasController::class, 'index'] )->name('ventas.index');
+Route::get('/ventas/listar', [App\Http\Controllers\VentasController::class, 'listar'] )->name('ventas.listar');
+Route::get('/ventas/crear', [App\Http\Controllers\VentasController::class, 'crearVenta'] )->name('ventas.crear');
+Route::post('/ventas/guardar', [App\Http\Controllers\VentasController::class, 'guardarVenta'])->name('ventas.guardar');
+Route::get('/ventas/editar/{id}', [App\Http\Controllers\VentasController::class, 'editarVenta'] )->name('ventas.editar');
+Route::delete('/ventas/eliminar/{id}', [App\Http\Controllers\VentasController::class, 'eliminarVenta'])->name('ventas.eliminar');
+Route::get('/ventas/getStockProducto/{id}', [App\Http\Controllers\VentasController::class, 'obtenerStockProducto'])->name('obtenerStockProducto');
+Route::get('/ventas/pdf/{id}', [App\Http\Controllers\VentasController::class, 'reportePDF'])->name('ventas.reportePDF');
+
+
+Route::get('/ajustes', [App\Http\Controllers\AjustesController::class, 'index'] )->name('ajustes.index');
+Route::get('/ajustes/listar', [App\Http\Controllers\AjustesController::class, 'listar'] )->name('ajustes.listar');
+Route::get('/ajustes/crear', [App\Http\Controllers\AjustesController::class, 'crearAjuste'] )->name('ajustes.crear');
+Route::post('/ajustes/guardar', [App\Http\Controllers\AjustesController::class, 'guardarAjuste'])->name('ajustes.guardar');
+
+
+Route::get('/panel', [App\Http\Controllers\PanelController::class, 'index'] )->name('panel');

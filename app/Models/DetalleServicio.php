@@ -9,11 +9,12 @@ class DetalleServicio extends Model
 {
     use HasFactory;
     protected $table = 'detalle_servicios';
+    public $timestamps = false;
     protected $fillable = [
         'total_detalle',
         'id_servicio',
         'id_venta',
-
+        'cantidad',
     ];
 
     public function venta(){

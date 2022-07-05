@@ -15,14 +15,48 @@
 
 
                 <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('panel') }}" :active="request()->routeIs('panel')">
+                        {{ __('Panel') }}
+                    </x-jet-nav-link>
+                </div>
 
-                                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                  
+
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('productos.index') }}" >
+                        {{ __('Productos') }}
+                    </x-jet-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('ajustes.index') }}" >
+                        {{ __('Ajuste Inventario') }}
+                    </x-jet-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('ventas.index') }}" >
+                        {{ __('Registrar Venta') }}
+                    </x-jet-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('compras.index') }}" >
+                        {{ __('Registrar Compra') }}
+                    </x-jet-nav-link>
+                </div>
+
+
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    
 
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
     
                             <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>CRUDS</div>
+                                <div>Registros</div>
     
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -36,38 +70,38 @@
                         <x-slot name="content">
     
 
-    
+                            <x-jet-dropdown-link href="{{ route('proveedores.index') }}" :active="request()->routeIs('proveedores.index')">
+                                {{ __('Proveedores') }}
+                            </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('servicios.index') }}" :active="request()->routeIs('servicios.index')">
+                                {{ __('Servicios') }}
+                            </x-jet-dropdown-link>
+
+                            
+
+                            <x-jet-dropdown-link href="{{ route('categorias.index') }}" :active="request()->routeIs('categorias.index')">
+                                {{ __('Categorias') }}
+                            </x-jet-dropdown-link>
+{{-- 
+                            <x-jet-dropdown-link href="{{ route('ventas.index') }}" :active="request()->routeIs('ventas.index')">
+                                {{ __('Ventas') }}
+                            </x-jet-dropdown-link>
+
+                            <x-jet-dropdown-link href="{{ route('compras.index') }}" :active="request()->routeIs('compras.index')">
+                                {{ __('Compras') }}
+                            </x-jet-dropdown-link> --}}
+
+                                
                             <x-jet-dropdown-link href="{{ route('clientes.index') }}" :active="request()->routeIs('clientes.index')">
                                 {{ __('Clientes') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Productos') }}
-                            </x-jet-dropdown-link>
-
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Proveedores') }}
-                            </x-jet-dropdown-link>
-
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Servicios') }}
-                            </x-jet-dropdown-link>
-
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Ventas') }}
-                            </x-jet-dropdown-link>
-
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
+                            <x-jet-dropdown-link href="" :active="request()->routeIs('usuarios.index')">
                                 {{ __('Usuarios') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Compras') }}
-                            </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('clientes.index')">
-                                {{ __('Categorias') }}
-                            </x-jet-dropdown-link>
     
                         </x-slot>
     
@@ -75,30 +109,7 @@
                 </div>
 
 
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('tablero') }}" :active="request()->routeIs('tablero')">
-                        {{ __('Dashboard') }}
-                    </x-jet-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('tablero') }}" >
-                        {{ __('Ajuste Inventario') }}
-                    </x-jet-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('tablero') }}" >
-                        {{ __('Registrar Venta') }}
-                    </x-jet-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('tablero') }}" >
-                        {{ __('Lista de Stock') }}
-                    </x-jet-nav-link>
-                </div>
+                
 
 {{--                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('clientes.index') }}" :active="request()->routeIs('clientes.index')">

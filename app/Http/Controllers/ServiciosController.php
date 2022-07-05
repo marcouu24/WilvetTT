@@ -24,7 +24,38 @@ class ServiciosController extends Controller
     }
 
 
+
     public function guardarServicio(Request $request)
+    {
+        try{
+            if ( $request->id ) {
+                $servicio_existente = Servicio::where('nombre', $request->servicio['nombre'])->first();
+                if($servicio_existente != null && $servicio_existente->id != $request->id){
+                    alert()->error('Error','Ya exite un servicio con ese nombre');
+                    return redirect()->back()->withInput();
+                }
+                $servicio = Servicio::findOrFail($request->id);
+                $servicio->update( $request->servicio);   
+            }else{
+                $servicio_existente = Servicio::where('nombre', $request->servicio['nombre'])->first();
+                if($servicio_existente == null){
+                    $servicio = Servicio::create( $request->servicio );
+                }
+                else{
+                    alert()->error('Error','Ya exite un servicio con ese nombre');
+                    return redirect()->back()->withInput();
+                }
+            } 
+            alert()->success('¡Éxito!','Servicio guardado satisfactoriamente');
+            return redirect(route('servicios.index'));
+        }catch(Exception $e){
+            alert()->error('Error','No se pudo guardar el servicio, intente nuevamente');
+            report($e);
+            return redirect()->back()->withInput();
+        }
+    }
+
+/*     public function guardarServicio(Request $request)
     {
         try{
         
@@ -53,7 +84,7 @@ class ServiciosController extends Controller
             report($e);
             return redirect()->back()->withInput();
         }
-    }
+    } */
 
 
     public function editarServicio($id)
@@ -83,7 +114,7 @@ class ServiciosController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($servicio){
                
-                    $actionBtn = '<a href="'.route('servicios.editar',$servicio->id).'" class="edit btn btn-success btn-sm ">Editar</a> 
+                    $actionBtn = '<a href="'.route('servicios.editar',$servicio->id).'" class="edit btn btn-warning btn-sm ">Editar</a> 
                     
                     <form action="'.route('servicios.eliminar',$servicio->id).'" class="d-inline js-form-eliminar" method="post">
                         <input type="hidden" name="_token" value="'.csrf_token().'">

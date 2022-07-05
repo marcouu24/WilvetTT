@@ -9,6 +9,7 @@ class DetalleVenta extends Model
 {
     use HasFactory;
     protected $table = 'detalle_ventas';
+    public $timestamps = false;
     protected $fillable = [
         'cantidad',
         'total_detalle',

@@ -21,7 +21,38 @@ class CategoriasController extends Controller
         return view('categorias.crear', compact('categoria'));
     }
 
+
     public function guardarCategoria(Request $request)
+    {
+        try{
+            if ( $request->id ) {
+                $categoria_existente = Categoria::where('nombre', $request->categoria['nombre'])->first();
+                if($categoria_existente != null && $categoria_existente->id != $request->id){
+                    alert()->error('Error','Ya exite una categoría con ese nombre');
+                    return redirect()->back()->withInput();
+                }
+                $categoria = Categoria::findOrFail($request->id);
+                $categoria->update( $request->categoria);   
+            }else{
+                $categoria_existente = Categoria::where('nombre', $request->categoria['nombre'])->first();
+                if($categoria_existente == null){
+                    $categoria = Categoria::create( $request->categoria );
+                }
+                else{
+                    alert()->error('Error','Ya exite una categoría con ese nombre');
+                    return redirect()->back()->withInput();
+                }
+            } 
+            alert()->success('¡Éxito!','Categoría guardada satisfactoriamente');
+            return redirect(route('categorias.index'));
+        }catch(Exception $e){
+            alert()->error('Error','No se pudo guardar la categoría, intente nuevamente');
+            report($e);
+            return redirect()->back()->withInput();
+        }
+    }
+
+/*     public function guardarCategoria(Request $request)
     {
         try{
         
@@ -50,7 +81,7 @@ class CategoriasController extends Controller
             report($e);
             return redirect()->back()->withInput();
         }
-    }
+    } */
 
 
     public function editarCategoria($id)
@@ -82,7 +113,7 @@ class CategoriasController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($categoria){
                
-                    $actionBtn = '<a href="'.route('categorias.editar',$categoria->id).'" class="edit btn btn-success btn-sm ">Editar</a> 
+                    $actionBtn = '<a href="'.route('categorias.editar',$categoria->id).'" class="edit btn btn-warning btn-sm ">Editar</a> 
                     
                     <form action="'.route('categorias.eliminar',$categoria->id).'" class="d-inline js-form-eliminar" method="post">
                         <input type="hidden" name="_token" value="'.csrf_token().'">
