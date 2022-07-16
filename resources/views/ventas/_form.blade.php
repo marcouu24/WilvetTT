@@ -62,7 +62,7 @@
                                         <select class="select" style="width: 100%" name="venta[rut_cliente]" id="venta_rut_cliente">
                                             <option value="">SIN ASIGNAR</option>
                                             @foreach ($clientes as $cliente)                            
-                                            <option @if(old('venta.rut_cliente',$venta->rut_cliente)==$cliente->rut) selected @endif value="{{ $cliente['id'] }}">{{ $cliente['rut'] }}</option>
+                                            <option @if(old('venta.rut_cliente',$venta->rut_cliente)==$cliente->rut) selected @endif value="{{ $cliente['rut'] }}">{{ $cliente['rut'] }}</option>
                                             @endforeach
                                         </select>    
                                    
@@ -128,15 +128,15 @@
                                         <td><input class="case" type="checkbox"></td>
 
                                         <td>
-                                             <select class="productos_select2" style="width: 100%" name="productos_venta[{{$detalle_venta->id}}][id_producto]" id="productos_venta_id_producto{{$detalle_venta->id}}"> 
+                                             <select class="productos_select2 productos-select" data-id-detalle-venta={{$detalle_venta->id}} style="width: 100%" name="productos_venta[{{$detalle_venta->id}}][id_producto]" id="productos_venta_id_producto{{$detalle_venta->id}}"> 
                                                  @foreach ($productos as $producto)  
-                                                 <option @if(old('id_producto',$detalle_venta->id_producto)==$producto->id) selected @endif value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
+                                                 <option @if(old('id_producto',$detalle_venta->id_producto)==$producto->id) selected @endif data-producto-precio="{{ $producto['precio_venta'] }}" value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
                                                  @endforeach 
                                             </select> 
                                         </td>
 
-                                        <td><input type="number" name="productos_venta[{{$detalle_venta->id}}][cantidad]" id="productos_venta_cantidad{{$detalle_venta->id}}" value="{{$detalle_venta->cantidad}}" class="form-control  text-end" ></td>
-                                        <td><input type="text" name="productos_venta[{{$detalle_venta->id}}][total_detalle]" id="productos_venta_total_detalle{{$detalle_venta->total_detalle}}" value="{{$detalle_venta->total_detalle}}" class="form-control  text-end" ></td>
+                                        <td><input type="number" data-id-detalle-venta={{$detalle_venta->id}} data-id-producto={{$detalle_venta->id_producto}} name="productos_venta[{{$detalle_venta->id}}][cantidad]" id="productos_venta_cantidad{{$detalle_venta->id}}" value="{{$detalle_venta->cantidad}}" class="cantidad-productos form-control  text-end" ></td>
+                                        <td><input type="text" name="productos_venta[{{$detalle_venta->id}}][total_detalle]" id="productos_venta_total_detalle{{$detalle_venta->id}}" value="{{$detalle_venta->total_detalle}}" class="form-control  text-end" ></td>
                                         <input type="hidden"  name="productos_venta[{{$detalle_venta->id}}][id_venta]" value="{{$detalle_venta->id_venta}}">
                                                                       
                                     </tr>
@@ -332,6 +332,16 @@
 
 $('#form').on('submit', function() {
     $('option').prop('disabled', false);
+
+    $('.total_detalle').each(function(){
+            var total_detalle= parseInt(this.value.replace('$', '').replace(',', '').trim());    
+            
+                this.value= parseInt(total_detalle) ;
+                
+                
+           
+        });
+
 });
 
 var marcados= [];
@@ -397,10 +407,103 @@ function formato_moneda($numero){
 
 
 document.addEventListener('DOMContentLoaded', function(){ 
+    var marcados= [];
+    var ServiciosMarcados= [];
+
     $('.productos_select2').select2();
     $('.servicios_select2').select2();
-    $('#venta_rut_cliente').select2()
+    $('#venta_rut_cliente').select2();
+
+    $('.cantidad-productos').on('change',function(e){
+          
+          var cantidad=this.value;
+        var idDetalleVenta= $(this).attr("data-id-detalle-venta") 
+        console.log('DETALLE VENTA ID: '+ idDetalleVenta);
+          console.log('aaaaasdas: '+ cantidad);
+          console.log($(this).attr("data-id-producto"));
+
+          let url = "{{route('obtenerStockProducto','')}}" + '/' + $(this).attr("data-id-producto").toString();
+          $.getJSON(url, function(data){
+              let stock= data;
+              
+              if(cantidad>stock){
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'NO HAY STOCK SUFICIENTE',
+                      text: 'Stock Disponible: ' + stock,
+             
+                  })
+
+                  $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
+                  var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+                      $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+                      calcularTotalVenta();
+              }
+
+             
+
+          });
+          //DEFINIR TOTAL DETALLE
+          var total_Detalle= cantidad * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+          console.log(total_Detalle);
+          $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+          calcularTotalVenta();
+      }); 
     
+
+
+
+
+      $('.productos-select').on('select2:select', function (e) {
+        var idDetalleVenta= $(this).attr("data-id-detalle-venta") 
+marcados.push($(this).select2().find(":selected").val())
+console.log(marcados);
+$(this).select2().find(":selected").attr('selected','selected');
+ 
+
+// $('#productos_venta_cantidad'+i).attr('data-id-producto' , $('#productos_venta_id_producto'+i).val());   // JQuery
+ $('#productos_venta_cantidad'+idDetalleVenta).attr('data-id-producto' , $(this).select2().find(":selected").val());   // JQuery
+
+ //aaaaaa
+
+
+
+
+if(document.getElementById('productos_venta_cantidad'+idDetalleVenta).value!=''){
+    var cantidad=document.getElementById('productos_venta_cantidad'+idDetalleVenta).value;
+    console.log('DISTINTO DE VACIO')
+  
+    let url = "{{route('obtenerStockProducto','')}}" + '/' + $('#productos_venta_cantidad'+idDetalleVenta).attr("data-id-producto").toString();
+    $.getJSON(url, function(data){
+        let stock= data;
+        
+        if(cantidad>stock){
+            Swal.fire({
+                icon: 'error',
+                title: 'NO HAY STOCK SUFICIENTE',
+                text: 'Stock Disponible: ' + stock,
+    
+            })
+
+            $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
+
+            var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+            $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+            calcularTotalVenta();
+        }
+
+    });
+
+    var total_Detalle= cantidad * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+    $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+    calcularTotalVenta();
+
+} 
+
+});
+
+
+
    
 });
 
@@ -436,9 +539,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 })  
 
 
-                $(".total_detalle").on('change',function(){
+              /*   $(".total_detalle").on('change',function(){
                     console.log('CAMVIO DE PREVIO AANSDJK');
-                });
+                }); */
 
                 
 

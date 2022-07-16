@@ -118,7 +118,7 @@ class VentasController extends Controller
                     
 
                     }else{
-                        dd($request);
+                       /*  dd($request); */
                         //CREAR VENTA
                         $venta = Venta::create([   
                             'fecha_venta' => $request->venta['fecha_venta'],
@@ -137,6 +137,7 @@ class VentasController extends Controller
                         if ($request->productos_venta != null){
                             
                             foreach($request->productos_venta as $productoVenta){
+                                                         
                                 $detalleVenta= DetalleVenta::create([                                 
                                     'cantidad' => $productoVenta['cantidad'],
                                     'total_detalle' => $productoVenta['total_detalle'],               
@@ -152,6 +153,7 @@ class VentasController extends Controller
                         if ($request->servicios_venta != null){
                             
                             foreach($request->servicios_venta as $servicioVenta){
+                               
                                 $detalleServicio= DetalleServicio::create([                                                                    
                                     'total_detalle' => $servicioVenta['total_detalle'],               
                                     'id_servicio' => $servicioVenta['id_servicio'],       
@@ -192,7 +194,8 @@ class VentasController extends Controller
         $venta =  Venta::find($id);
         $servicios= Servicio::all();
         $productos= Producto::all();
-        return view('ventas.editar',compact('venta','servicios','productos'));
+        $clientes= Cliente::all();
+        return view('ventas.editar',compact('venta','servicios','productos','clientes'));
     }
 
     public function eliminarVenta($id){
