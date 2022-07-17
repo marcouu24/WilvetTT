@@ -8,6 +8,7 @@
 </style>
 
 
+
 <div class="main-ver-concesion container my-5 mb-5">
     <div class="card shadow-sm p-3 mb-5 bg-white rounde">
         <div class="col">
@@ -42,7 +43,7 @@
                     @php
                                 function moneda($number, $prefix = '$ ', $decimals = 0)
                                 {
-                                    return $prefix.number_format($number, $decimals, ',', '.');
+                                    return $prefix.number_format($number, $decimals, ',', ',');
                                 }
                     @endphp 
                     
@@ -125,18 +126,18 @@
                                           @foreach($venta->detalle_ventas as $detalle_venta)
                                          
                                     <tr>
-                                        <td><input class="case" type="checkbox"></td>
+                                        <td><input class="case" id="{{$detalle_venta->id}}" type="checkbox"></td>
 
                                         <td>
                                              <select class="productos_select2 productos-select" data-id-detalle-venta={{$detalle_venta->id}} style="width: 100%" name="productos_venta[{{$detalle_venta->id}}][id_producto]" id="productos_venta_id_producto{{$detalle_venta->id}}"> 
                                                  @foreach ($productos as $producto)  
-                                                 <option @if(old('id_producto',$detalle_venta->id_producto)==$producto->id) selected @endif data-producto-precio="{{ $producto['precio_venta'] }}" value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
+                                                 <option @if(old('id_producto',$detalle_venta->id_producto)==$producto->id) selected class="producto-seleccionado" @endif data-producto-precio="{{ $producto['precio_venta'] }}" value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
                                                  @endforeach 
                                             </select> 
                                         </td>
 
                                         <td><input type="number" data-id-detalle-venta={{$detalle_venta->id}} data-id-producto={{$detalle_venta->id_producto}} name="productos_venta[{{$detalle_venta->id}}][cantidad]" id="productos_venta_cantidad{{$detalle_venta->id}}" value="{{$detalle_venta->cantidad}}" class="cantidad-productos form-control  text-end" ></td>
-                                        <td><input type="text" name="productos_venta[{{$detalle_venta->id}}][total_detalle]" id="productos_venta_total_detalle{{$detalle_venta->id}}" value="{{$detalle_venta->total_detalle}}" class="form-control  text-end" ></td>
+                                        <td><input type="text" readonly name="productos_venta[{{$detalle_venta->id}}][total_detalle]" id="productos_venta_total_detalle{{$detalle_venta->id}}" value="{{moneda($detalle_venta->total_detalle)}}" class="form-control total_detalle text-end" ></td>
                                         <input type="hidden"  name="productos_venta[{{$detalle_venta->id}}][id_venta]" value="{{$detalle_venta->id_venta}}">
                                                                       
                                     </tr>
@@ -187,18 +188,18 @@
                                          @foreach($venta->detalle_servicios as $detalle_servicio)
                                          
                                     <tr>
-                                        <td><input class="case" type="checkbox"></td>
+                                        <td><input class="case" id="{{$detalle_servicio->id}}" type="checkbox"></td>
 
                                         <td>
-                                             <select class="servicios_select2" style="width: 100%" name="servicios_venta[{{$detalle_servicio->id}}][id_servicio]" id="servicios_venta_id_servicio{{$detalle_servicio->id}}"> 
+                                             <select class="servicios_select2" style="width: 100%" data-id-detalle-servicio={{$detalle_servicio->id}} name="servicios_venta[{{$detalle_servicio->id}}][id_servicio]" id="servicios_venta_id_servicio{{$detalle_servicio->id}}"> 
                                                  @foreach ($servicios as $servicio)  
-                                                 <option @if(old('id_servicio',$detalle_servicio->id_servicio)==$servicio->id) selected @endif value="{{ $servicio['id'] }}">{{ $servicio['nombre'] }}</option> 
+                                                 <option @if(old('id_servicio',$detalle_servicio->id_servicio)==$servicio->id) class="servicio-seleccionado" selected @endif data-servicio-precio="{{ $servicio['valor_servicio'] }}" value="{{ $servicio['id'] }}">{{ $servicio['nombre'] }} </option> 
                                                  @endforeach 
                                             </select> 
                                         </td>
 
-                                        <td><input type="number" name="servicios_venta[{{$detalle_servicio->id}}][cantidad]" id="servicios_venta_cantidad{{$detalle_servicio->id}}" value="{{$detalle_servicio->cantidad}}" class="form-control  text-end" ></td>
-                                        <td><input type="number" name="servicios_venta[{{$detalle_servicio->id}}][total_detalle]" id="servicios_venta_total_detalle{{$detalle_servicio->id}}" value="{{$detalle_servicio->total_detalle}}" class="form-control  text-end" ></td>
+                                        <td><input type="number" name="servicios_venta[{{$detalle_servicio->id}}][cantidad]" data-id-detalle-servicio={{$detalle_servicio->id}}  id="servicios_venta_cantidad{{$detalle_servicio->id}}" value="{{$detalle_servicio->cantidad}}" class="form-control servicios_venta_cantidad text-end" ></td>
+                                        <td><input type="text" name="servicios_venta[{{$detalle_servicio->id}}][total_detalle]" readonly id="servicios_venta_total_detalle{{$detalle_servicio->id}}" value="{{moneda($detalle_servicio->total_detalle)}}" class="form-control total_detalle text-end" ></td>
                                        
                                         <input type="hidden"  name="servicios_venta[{{$detalle_servicio->id}}][id_venta]" value="{{$detalle_servicio->id_venta}}">
                                                                       
@@ -357,7 +358,7 @@ marcados.splice(myIndex, 1);
 
 
 
-function formato_moneda($numero){
+    function formato_moneda($numero){
         var formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'CLP',
@@ -393,7 +394,7 @@ function formato_moneda($numero){
 
         var precio_total_venta=0;
         $('.total_detalle').each(function(){
-            var total= parseInt(this.value.replace('$', '').replace(',', '').trim());    
+            var total= parseInt(this.value.replace('$', '').replace(',', '').replace('.', '').trim());    
             if (isNaN(total)) {
                 total=0;
             } 
@@ -407,8 +408,39 @@ function formato_moneda($numero){
 
 
 document.addEventListener('DOMContentLoaded', function(){ 
-    var marcados= [];
-    var ServiciosMarcados= [];
+   /*  var marcados= [];
+    var ServiciosMarcados= []; */
+
+   
+
+
+    $('.producto-seleccionado').each(function(){
+          console.log(this.value);
+           marcados.push(this.value); 
+    });
+
+
+
+
+    $('.servicio-seleccionado').each(function(){
+          console.log(this.value);
+          ServiciosMarcados.push(this.value); 
+    });
+
+    if(marcados.length>0){   
+            for (i = 0; i < marcados.length; i++) {          
+                $('.productos_select2').find("[value='"+marcados[i]+"']").prop("disabled",true);
+            } 
+    }    
+
+    if(ServiciosMarcados.length>0){   
+            for (i = 0; i < ServiciosMarcados.length; i++) {          
+                $('.servicios_select2').find("[value='"+ServiciosMarcados[i]+"']").prop("disabled",true);
+            } 
+       }    
+
+
+
 
     $('.productos_select2').select2();
     $('.servicios_select2').select2();
@@ -416,96 +448,228 @@ document.addEventListener('DOMContentLoaded', function(){
 
     $('.cantidad-productos').on('change',function(e){
           
-          var cantidad=this.value;
+        var cantidad=this.value;
         var idDetalleVenta= $(this).attr("data-id-detalle-venta") 
-        console.log('DETALLE VENTA ID: '+ idDetalleVenta);
-          console.log('aaaaasdas: '+ cantidad);
-          console.log($(this).attr("data-id-producto"));
-
+       
           let url = "{{route('obtenerStockProducto','')}}" + '/' + $(this).attr("data-id-producto").toString();
           $.getJSON(url, function(data){
               let stock= data;
               
-              if(cantidad>stock){
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'NO HAY STOCK SUFICIENTE',
-                      text: 'Stock Disponible: ' + stock,
-             
-                  })
+            if(cantidad>stock){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'NO HAY STOCK SUFICIENTE',
+                    text: 'Stock Disponible: ' + stock,
+                })
 
-                  $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
-                  var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
-                      $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
-                      calcularTotalVenta();
-              }
-
-             
-
+                $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
+                var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+                $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+                calcularTotalVenta();
+            }
           });
+
           //DEFINIR TOTAL DETALLE
           var total_Detalle= cantidad * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
           console.log(total_Detalle);
           $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
           calcularTotalVenta();
-      }); 
+    }); 
     
 
 
 
 
-      $('.productos-select').on('select2:select', function (e) {
+    $('.productos-select').on('select2:select', function (e) {
         var idDetalleVenta= $(this).attr("data-id-detalle-venta") 
-marcados.push($(this).select2().find(":selected").val())
-console.log(marcados);
-$(this).select2().find(":selected").attr('selected','selected');
+        marcados.push($(this).select2().find(":selected").val())
+        console.log(marcados);
+        $(this).select2().find(":selected").attr('selected','selected');
  
 
-// $('#productos_venta_cantidad'+i).attr('data-id-producto' , $('#productos_venta_id_producto'+i).val());   // JQuery
- $('#productos_venta_cantidad'+idDetalleVenta).attr('data-id-producto' , $(this).select2().find(":selected").val());   // JQuery
-
- //aaaaaa
+        // $('#productos_venta_cantidad'+i).attr('data-id-producto' , $('#productos_venta_id_producto'+i).val());   // JQuery
+        $('#productos_venta_cantidad'+idDetalleVenta).attr('data-id-producto' , $(this).select2().find(":selected").val());   // JQuery
 
 
 
 
-if(document.getElementById('productos_venta_cantidad'+idDetalleVenta).value!=''){
-    var cantidad=document.getElementById('productos_venta_cantidad'+idDetalleVenta).value;
-    console.log('DISTINTO DE VACIO')
-  
-    let url = "{{route('obtenerStockProducto','')}}" + '/' + $('#productos_venta_cantidad'+idDetalleVenta).attr("data-id-producto").toString();
-    $.getJSON(url, function(data){
-        let stock= data;
+        if(document.getElementById('productos_venta_cantidad'+idDetalleVenta).value!=''){
+            var cantidad=document.getElementById('productos_venta_cantidad'+idDetalleVenta).value;
+            console.log('DISTINTO DE VACIO')
         
-        if(cantidad>stock){
-            Swal.fire({
-                icon: 'error',
-                title: 'NO HAY STOCK SUFICIENTE',
-                text: 'Stock Disponible: ' + stock,
-    
-            })
+            let url = "{{route('obtenerStockProducto','')}}" + '/' + $('#productos_venta_cantidad'+idDetalleVenta).attr("data-id-producto").toString();
+            $.getJSON(url, function(data){
+                let stock= data;
+                
+                if(cantidad>stock){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'NO HAY STOCK SUFICIENTE',
+                        text: 'Stock Disponible: ' + stock,
+            
+                    })
 
-            $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
+                    $('#productos_venta_cantidad'+idDetalleVenta).val(stock);
 
-            var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+                    var total_Detalle= stock * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
+                    $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+                    calcularTotalVenta();
+                }
+
+            });
+
+            var total_Detalle= cantidad * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
             $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
             calcularTotalVenta();
-        }
 
+        } 
     });
 
-    var total_Detalle= cantidad * $('#productos_venta_id_producto'+idDetalleVenta).select2().find(":selected").data("producto-precio");
-    $('#productos_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+
+
+    $(".eliminar_producto").on('click', function(e) {
+              
+              let id2=($('.case:checkbox:checked').attr('id'));      
+              var idd= $('#productos_venta_id_producto'+id2).select2().find(":selected").val();
+           
+              $('.case:checkbox:checked').parents("tr").remove();
+              $('#check_all').prop("checked", false); 
+
+
+              var myIndex = marcados.indexOf(idd);
+
+              if (myIndex !== -1) {
+              marcados.splice(myIndex, 1);
+              }
+              calcularTotalVenta();
+          });
+
+
+
+        $('.productos-select').on('select2:opening', function (e) {
+            
+            $(this).find("option").prop("disabled",false);    
+            
+            if(marcados.length>0){   
+                for (i = 0; i < marcados.length; i++) {          
+                    $('.productos_select2').find("[value='"+marcados[i]+"']").prop("disabled",true);
+                } 
+            }    
+        })  
+
+
+        $('.productos-select').on("select2:selecting", function (e) {
+                    
+                    var opcion= ($(this).select2().find(":selected").val());
+                    if(opcion!=''){
+                       console.log('OPCION ANTERIOR: ' + opcion);
+                       var indice = marcados.indexOf(opcion); // obtenemos el indice
+                        marcados.splice(indice, 1); 
+                    }                 
+               }); 
+
+
+    // SERVICIOS
+
+    $('.servicios_venta_cantidad').on('change',function(e){
+          
+          var cantidad=this.value;
+          var idDetalleVenta= $(this).attr("data-id-detalle-servicio") 
+         
+            console.log('CANTIDAD: ' + cantidad);
+            console.log('ID DETALLE VENTA: ' + idDetalleVenta);
+            console.log('Precio Servicio: ' + $('#servicios_venta_id_servicio'+idDetalleVenta).select2().find(":selected").data("servicio-precio"));
+  
+            //DEFINIR TOTAL DETALLE
+            var total_Detalle= cantidad * $('#servicios_venta_id_servicio'+idDetalleVenta).select2().find(":selected").data("servicio-precio");
+            console.log('TOTAL DETALLE:' + total_Detalle);
+            $('#servicios_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_Detalle));
+           
+            calcularTotalVenta();
+      }); 
+
+
+      $(".eliminar_servicio").on('click', function(e) {
+              
+              let id2=($('.case:checkbox:checked').attr('id'));      
+              var idd= $('#servicios_venta_id_servicio'+id2).select2().find(":selected").val();
+           
+              $('.case:checkbox:checked').parents("tr").remove();
+              $('#check_all').prop("checked", false); 
+
+
+              var myIndex = ServiciosMarcados.indexOf(idd);
+
+              if (myIndex !== -1) {
+              ServiciosMarcados.splice(myIndex, 1);
+              }
+              calcularTotalVenta();
+          });
+
+
+          $('.servicios_select2').on("select2:selecting", function (e) {
+                    
+                    var opcion= ($(this).select2().find(":selected").val());
+                    if(opcion!=''){
+                       console.log('OPCION ANTERIOR: ' + opcion);
+                       var indice = ServiciosMarcados.indexOf(opcion); // obtenemos el indice
+                        ServiciosMarcados.splice(indice, 1); 
+                    }                 
+               }); 
+
+
+            $('.servicios_select2').on('select2:opening', function (e) {
+            
+            $(this).find("option").prop("disabled",false);    
+            
+            if(ServiciosMarcados.length>0){   
+                for (i = 0; i < ServiciosMarcados.length; i++) {          
+                    $('.servicios_select2').find("[value='"+ServiciosMarcados[i]+"']").prop("disabled",true);
+                } 
+            }    
+        })  
+
+
+
+
+
+        $('.servicios_select2').on('select2:select', function (e) {
+
+var idDetalleVenta= $(this).attr("data-id-detalle-servicio") 
+console.log('ID DETALLE VENTA' + idDetalleVenta);
+ServiciosMarcados.push($(this).select2().find(":selected").val())
+
+$(this).select2().find(":selected").attr('selected','selected');
+
+
+
+$('#servicios_venta_cantidad'+idDetalleVenta).attr('data-id-servicio' , $(this).select2().find(":selected").val()); 
+
+
+
+if(document.getElementById('servicios_venta_cantidad'+idDetalleVenta).value!=''){
+    var cantidadServicio=document.getElementById('servicios_venta_cantidad'+idDetalleVenta).value;
+
+
+
+    var total_DetalleServicio= cantidadServicio * $('#servicios_venta_id_servicio'+idDetalleVenta).select2().find(":selected").data("servicio-precio");
+    $('#servicios_venta_total_detalle'+idDetalleVenta).val(formato_moneda(total_DetalleServicio));
     calcularTotalVenta();
 
 } 
-
 });
+
+
+    //
 
 
 
    
 });
+
+//FIN DOM CNTENT LOAD
+
+
 
 //AGREGAR ROW TABLA COSTO
             $(".agregar_producto").on('click',function(){
@@ -537,14 +701,6 @@ if(document.getElementById('productos_venta_cantidad'+idDetalleVenta).value!='')
                     $('#productos_venta_id_producto'+i).find("option").prop("disabled",false);    
                     actualizarOpciones();
                 })  
-
-
-              /*   $(".total_detalle").on('change',function(){
-                    console.log('CAMVIO DE PREVIO AANSDJK');
-                }); */
-
-                
-
 
 
 

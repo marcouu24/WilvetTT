@@ -96,9 +96,9 @@ function fecha($date, $format = 'd-m-Y')
     <table class="table" >
         <thead>
             <tr>
-                <th align="left"width="">Producto</th>
-                <th align="right" width="">Cantidad</th>
-                <th align="right" width="">Total Detalle</th>
+                <th width="70%" align="left"width="">Producto</th>
+                <th width="10%"  align="right" width="">Cantidad</th>
+                <th width="20%" align="right" width="">Total Detalle</th>
             </tr>
 
         </thead>
@@ -109,7 +109,7 @@ function fecha($date, $format = 'd-m-Y')
 
             <tr style="border-bottom: 1px solid #ccc;">
                 <td  align="left" >{{$detalleVenta->producto->nombre}}</td>
-                <td  align="right" >{{$detalleVenta->cantidad}}</td>
+                <td align="right" >{{$detalleVenta->cantidad}}</td>
                 <td align="right">{{moneda($detalleVenta->total_detalle)}}</td>
                 
             </tr>
@@ -130,8 +130,45 @@ function fecha($date, $format = 'd-m-Y')
 
 
 
+    <table class="table" >
+        <thead>
+            <tr>
+                <th width="70%" align="left"width="">Servicio</th>
+                <th width="10%"  align="right" width="">Cantidad</th>
+                <th width="20%" align="right" width="">Total Detalle</th>
+            </tr>
 
-     <table class="table">
+        </thead>
+        <tbody>
+            @php($total_servicios = 0)
+            @foreach ($venta->detalle_servicios as  $detalleServicio)
+            
+
+            <tr style="border-bottom: 1px solid #ccc;">
+                <td  align="left" >{{$detalleServicio->servicio->nombre}}</td>
+                <td align="right" >{{$detalleServicio->cantidad}}</td>
+                <td align="right">{{moneda($detalleServicio->total_detalle)}}</td>
+                
+            </tr>
+
+            @php($total_servicios = $total_servicios + $detalleServicio->total_detalle)
+             
+            
+             @endforeach
+           
+        </tbody>
+        <tfoot>
+            <tr>            
+                <td colspan="2" align="right"class="total">Total Servicios: </td>
+                <td  align="left" class="total num" style="padding:0"> {{moneda($total_servicios)}}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+{{--     <table class="table">
         <thead>
             <tr>
                 <th width="70%" align="left">Servicio</th>
@@ -158,13 +195,11 @@ function fecha($date, $format = 'd-m-Y')
         <tfoot>
             <tr>
                 <td></td>
-                <td colspan="1" align="right"class="total">Total Servicios:</td>
+                <td colspan="1" align="right"class="total">Total Productos</td>
                 <td class="total num" style="padding:0"> {{moneda($total_servicios)}}</td>
             </tr>
         </tfoot>
-    </table>
-
-
+    </table> --}}
 
 
 

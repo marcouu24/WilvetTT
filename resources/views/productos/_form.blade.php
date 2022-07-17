@@ -76,7 +76,7 @@
                 <div class="row">
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="categoria_id">Categoría</label>
-                        <select class="select" style="width: 100%" name="producto[id_categoria]" id="producto_id_categoria">
+                        <select class="select" style="width: 100%" name="producto[id_categoria]" required id="producto_id_categoria">
                             <option value="">--SELECCIONAR--</option>
                             @foreach ($categorias as $categoria)                            
                             <option @if(old('producto.id_categoria',$producto->id_categoria)==$categoria->id) selected @endif value="{{ $categoria['id'] }}">{{ $categoria['nombre'] }}</option>
