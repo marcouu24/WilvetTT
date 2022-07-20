@@ -7,6 +7,12 @@
     .primerth {width: 40px;overflow: hidden;}
 </style>
 
+@php
+                                function moneda($number, $prefix = '$ ', $decimals = 0)
+                                {
+                                    return $prefix.number_format($number, $decimals, ',', ',');
+                                }
+                    @endphp 
 
 <div class="main-ver-concesion container my-5 mb-5">
     <div class="card shadow-sm p-3 mb-5 bg-white rounde">
@@ -52,7 +58,8 @@
                                 <div class="col-sm-3">
                                     <div class="mb-3">
                                         <label for="proveedor_id">Proveedor</label>                    
-                                        <select class="js-select-2" style="width: 100%" name="compra[id_proveedor]" id="compra_id_proveedor_select">
+                                        <select class="js-select-2 select2-select" required style="width: 100%" name="compra[id_proveedor]" id="compra_id_proveedor_select">
+                                            <option value="">--SELECCIONAR--</option>
                                             @foreach ($proveedores as $proveedor)                               
                                             <option @if(old('compra_id_proveedor'  ,$compra->id_proveedor)==$proveedor->id) selected @endif value="{{ $proveedor['id'] }}">{{ $proveedor['nombre'] }}</option>              
                                             @endforeach
@@ -64,7 +71,7 @@
                                         <label for="servicios_facturacion">Fecha Compra</label>
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="date"  class="form-control " value="{{$compra->fecha_compra}}"  id="compra_fecha_compra" name="compra[fecha_compra]">
+                                                <input type="date" required class="form-control " value="{{$compra->fecha_compra}}"  id="compra_fecha_compra" name="compra[fecha_compra]">
                                             </div>
                                             
                                         </div>
@@ -75,7 +82,7 @@
                                         <label for="servicios_facturacion">Total Compra</label>
                                         <div class="row">
                                             <div class="col-12">
-                                                <input readonly type="text" name="compra[total_compra]" id="compra_total_compra"  value="{{$compra->total_compra}}"  class="form-control text-center " >
+                                                <input readonly type="text" name="compra[total_compra]" id="compra_total_compra"  value="{{moneda($compra->total_compra)}}"  class="form-control total_compra text-center " >
                                             </div>
                                             
                                         </div>
@@ -109,8 +116,9 @@
                                             <th class="primerth"><input id="check_all" class="formcontrol" type="checkbox"></th>	
                                             <th class="thotros"> Producto</th>			
                                             <th class="thotros">Cantidad</th>
-                                            <th class="thotros">Total Detalle</th>
-                                            <th class="thotros">Precio Unitario</th>                        			
+                                            
+                                            <th class="thotros">Precio Unitario</th>     
+                                            <th class="thotros">Total Detalle</th>                   			
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -120,16 +128,17 @@
                                         <td><input class="case" type="checkbox"></td>
 
                                         <td>
-                                             <select class="select2-select" style="width: 100%" name="productos_compra[{{$detalle_compra->id}}][id_producto]" id="productos_compra_id_producto"> 
+                                             <select class="select2-select" style="width: 100%" name="productos_compra[{{$detalle_compra->id}}][id_producto]" id="productos_compra_id_producto{{$detalle_compra->id}}"> 
                                                  @foreach ($productos as $producto)  
                                                  <option @if(old('id_producto',$detalle_compra->id_producto)==$producto->id) selected @endif value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
                                                  @endforeach 
                                             </select> 
                                         </td>
 
-                                        <td><input type="number" name="productos_compra[{{$detalle_compra->id}}][cantidad]" id="productos_compra_cantidad{{$detalle_compra->id}}" value="{{$detalle_compra->cantidad}}" class="form-control  text-end" ></td>
-                                        <td><input type="number" name="productos_compra[{{$detalle_compra->id}}][total_detalle]" id="productos_compra_total_detalle{{$detalle_compra->total_detalle}}" value="{{$detalle_compra->total_detalle}}" class="form-control  text-end" ></td>
-                                        <td><input type="number" name="productos_compra[{{$detalle_compra->id}}][precio_unitario]" id="productos_compra_precio_unitario{{$detalle_compra->precio_unitario}}" value="{{$detalle_compra->precio_unitario}}" class="form-control  text-end" ></td>                                                                      
+                                        <td><input type="number" required min="1" data-id-numero="{{$detalle_compra->id}}" name="productos_compra[{{$detalle_compra->id}}][cantidad]" id="productos_compra_cantidad{{$detalle_compra->id}}" value="{{$detalle_compra->cantidad}}" class="form-control cantidad  text-end" ></td>
+                                        
+                                        <td><input type="number"required min="1"  data-id-numero="{{$detalle_compra->id}}" name="productos_compra[{{$detalle_compra->id}}][precio_unitario]" id="productos_compra_precio_unitario{{$detalle_compra->id}}" value="{{$detalle_compra->precio_unitario}}" class="form-control precio_unitario  text-end" ></td>                                                                      
+                                        <td><input type="text" data-id-numero="{{$detalle_compra->id}}" name="productos_compra[{{$detalle_compra->id}}][total_detalle]" readonly id="productos_compra_total_detalle{{$detalle_compra->id}}" value="{{moneda($detalle_compra->total_detalle)}}" class="form-control total_detalle text-end" ></td>
                                         <input type="hidden"  name="productos_compra[{{$detalle_compra->id}}][id_compra]" value="{{$detalle_compra->id_compra}}">
                                                                       
                                     </tr>
@@ -244,9 +253,99 @@
 
 <script>
 
+function formato_moneda($numero){
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'CLP',
+        });
+        $numero = formatter.format($numero);
+        $numero = $numero.replace("CLP", "$");
+        return $numero;
+    }
+
+    function calcularTotalVenta(){
+
+        var precio_total_venta=0;
+        $('.total_detalle').each(function(){
+            var total= parseInt(this.value.replace('$', '').replace(',', '').replace(',', '').replace('.', '').trim());    
+            if (isNaN(total)) {
+                total=0;
+            } 
+
+            precio_total_venta += total;        
+        });
+
+        $('#compra_total_compra').val(formato_moneda(precio_total_venta));   
+    };
+
 document.addEventListener('DOMContentLoaded', function(){ 
-    $('#compra_id_proveedor_select').select2();
+
+    $('#form').on('submit', function() {
+        $('.total_detalle').each(function(){
+                var total_detalle= parseInt(this.value.replace('$', '').replace(',', '').replace(',', '').trim());    
+                
+                    this.value= parseInt(total_detalle) ;         
+            });
+
+            $('.total_compra').each(function(){
+                var total_compra= parseInt(this.value.replace('$', '').replace(',', '').trim());    
+                
+                    this.value= parseInt(total_compra) ;         
+            });
+
+    });
+
+
+
+    $('.cantidad').on('change',function(e){
+
+var cantidad=this.value;
+var idNumero= $(this).attr("data-id-numero") 
+
+if($('#productos_compra_precio_unitario'+idNumero).val()!=''){
+
+    var precioUnitario=$('#productos_compra_precio_unitario'+idNumero).val();
+    var totalDetalle= precioUnitario * cantidad;
+
+    $('#productos_compra_total_detalle'+idNumero).val(formato_moneda(totalDetalle));
+    calcularTotalVenta();
+
+}
+})
+
+
+
+$('.precio_unitario').on('change',function(e){
+
+console.log('cambio');
+var precioUnitario=this.value;
+var idNumero= $(this).attr("data-id-numero") 
+
+if($('#productos_compra_cantidad'+idNumero).val()!=''){
+
+    var cantidad=$('#productos_compra_cantidad'+idNumero).val();
+    var totalDetalle= precioUnitario * cantidad;
+
+    console.log('CANTODAD: ' + cantidad);
+                        console.log('UNITARIO: ' + precioUnitario);
+                        console.log('TOTAL DETALLE: ' +totalDetalle);
+
+    $('#productos_compra_total_detalle'+idNumero).val(formato_moneda(totalDetalle));
+    calcularTotalVenta();
+
+}
+})
+
+
+    $('.select2-select').select2();
+
+
+
+
+
 });
+
+
 
 //AGREGAR ROW TABLA COSTO
 $(".agregar_producto").on('click',function(){
@@ -255,10 +354,11 @@ $(".agregar_producto").on('click',function(){
                 html += '<td><input class="case" type="checkbox"/></td>';
                 
                 
-                html += '<td> <select class="js-select-2" style="width: 100%" name="productos_compra['+i+'][id_producto]" id="productos_compra_id_producto'+i+'"> <option value=""></option> @foreach ($productos as $producto)  <option @if(old('id_producto',$producto->id_producto)==$producto->id) selected @endif value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> @endforeach </select> </td>';
-                html += '<td><input type="number" name="productos_compra['+i+'][cantidad]" id="productos_compra_cantidad'+i+'" class="form-control text-end"></td>';
-                html += '<td><input type="number" name="productos_compra['+i+'][total_detalle]" id="productos_compra_total_detalle'+i+'" class="form-control  text-end"></td>';
-                html += '<td><input type="number" name="productos_compra['+i+'][precio_unitario]" id="productos_compra_precio_unitario'+i+'" class="form-control  text-end"></td>';
+                html += '<td> <select required class="js-select-2" style="width: 100%" name="productos_compra['+i+'][id_producto]" id="productos_compra_id_producto'+i+'"> <option value=""></option> @foreach ($productos as $producto)  <option @if(old('id_producto',$producto->id_producto)==$producto->id) selected @endif value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> @endforeach </select> </td>';
+                html += '<td><input type="number" required min="1" name="productos_compra['+i+'][cantidad]" id="productos_compra_cantidad'+i+'" data-id-numero="'+i+'" class="form-control cantidad text-end"></td>';
+                html += '<td><input type="number" required min="1" name="productos_compra['+i+'][precio_unitario]" id="productos_compra_precio_unitario'+i+'" data-id-numero="'+i+'" class="form-control precio_unitario text-end"></td>';
+                html += '<td><input type="text" name="productos_compra['+i+'][total_detalle]" id="productos_compra_total_detalle'+i+'" data-id-numero="'+i+'" readonly class="form-control total_detalle text-end"></td>';
+                
                 html += ' <input type="hidden"  name="productos_compra['+i+'][id_compra]" value="">';
 
 
@@ -267,13 +367,60 @@ $(".agregar_producto").on('click',function(){
                 
                 $('#productos_compra_id_producto'+i).select2();
 
+
+                $('#productos_compra_cantidad'+i).on('change',function(e){
+
+                    var cantidad=this.value;
+                    var idNumero= $(this).attr("data-id-numero") 
+
+                    if($('#productos_compra_precio_unitario'+idNumero).val()!=''){
+                        var totalDetalle=0;
+                        var precioUnitario=$('#productos_compra_precio_unitario'+idNumero).val();
+                        totalDetalle= precioUnitario * cantidad;
+
+                        $('#productos_compra_total_detalle'+idNumero).val(formato_moneda(totalDetalle));
+                        calcularTotalVenta();
+
+                    }
+                    })
+
+
+
+                    $('#productos_compra_precio_unitario'+i).on('change',function(e){
+
+                    console.log('cambio');
+
+                    var totalDetalle=0;
+                    var precioUnitario=this.value;
+                    var idNumero= $(this).attr("data-id-numero") 
+
+                    if($('#productos_compra_cantidad'+idNumero).val()!=''){
+                       
+                        var cantidad=$('#productos_compra_cantidad'+idNumero).val();
+                        totalDetalle= precioUnitario * cantidad;
+
+                        console.log('CANTODAD: ' + cantidad);
+                        console.log('UNITARIO: ' + precioUnitario);
+
+                        $('#productos_compra_total_detalle'+idNumero).val(formato_moneda(totalDetalle));
+                        calcularTotalVenta();
+
+                    }
+                    })
+
+
+
+
             });
             
             //ELIMINAR ROW TABLA COSTO
             $(".eliminar_producto").on('click', function() {
                 $('.case:checkbox:checked').parents("tr").remove();
                 $('#check_all').prop("checked", false); 
+                calcularTotalVenta();
             });
+
+
 
 </script>
 

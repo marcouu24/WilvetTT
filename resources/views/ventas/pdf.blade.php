@@ -16,6 +16,8 @@ function fecha($date, $format = 'd-m-Y')
             }
     
         }
+
+        
 @endphp
 
     <meta charset="UTF-8">
@@ -74,10 +76,16 @@ function fecha($date, $format = 'd-m-Y')
     </div>
 
     <div class="secundario">
-      
+        
        
         <h3>Usuario: {{$venta->usuario->name}}</h3>
-        <h3>Cliente: {{$venta->cliente->nombre}}</h3>
+        <h3>Cliente: @php
+            if(isset($venta->cliente->nombre)==false){
+                echo 'SIN REGISTRO';
+            } else{
+                echo $venta->cliente->nombre;
+            }
+        @endphp</h3>
     </div>
 
     <div class="secundario1">

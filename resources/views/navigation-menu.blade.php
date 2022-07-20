@@ -83,21 +83,14 @@
                             <x-jet-dropdown-link href="{{ route('categorias.index') }}" :active="request()->routeIs('categorias.index')">
                                 {{ __('Categorias') }}
                             </x-jet-dropdown-link>
-{{-- 
-                            <x-jet-dropdown-link href="{{ route('ventas.index') }}" :active="request()->routeIs('ventas.index')">
-                                {{ __('Ventas') }}
-                            </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="{{ route('compras.index') }}" :active="request()->routeIs('compras.index')">
-                                {{ __('Compras') }}
-                            </x-jet-dropdown-link> --}}
 
                                 
                             <x-jet-dropdown-link href="{{ route('clientes.index') }}" :active="request()->routeIs('clientes.index')">
                                 {{ __('Clientes') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="" :active="request()->routeIs('usuarios.index')">
+                            <x-jet-dropdown-link href="{{ route('usuarios.index') }}" :active="request()->routeIs('usuarios.index')">
                                 {{ __('Usuarios') }}
                             </x-jet-dropdown-link>
 
@@ -239,9 +232,64 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+
+
+
+             <x-jet-responsive-nav-link href="{{ route('panel') }}" :active="request()->routeIs('panel')">
+                        {{ __('Panel') }}
+                    </x-jet-responsive-nav-link>
+                
+
+                  
+
+
+              
+                    <x-jet-responsive-nav-link href="{{ route('productos.index') }}" >
+                        {{ __('Productos') }}
+                    </x-jet-responsive-nav-link>
+               
+
+               
+                    <x-jet-responsive-nav-link href="{{ route('ajustes.index') }}" >
+                        {{ __('Ajuste Inventario') }}
+                    </x-jet-responsive-nav-link>
+             
+
+               
+                    <x-jet-responsive-nav-link href="{{ route('ventas.index') }}" >
+                        {{ __('Registrar Venta') }}
+                    </x-jet-responsive-nav-link>
+              
+
+                
+                    <x-jet-responsive-nav-link href="{{ route('compras.index') }}" >
+                        {{ __('Registrar Compra') }}
+                    </x-jet-responsive-nav-link>
+                
+
+            <x-jet-responsive-nav-link href="{{ route('proveedores.index') }}" :active="request()->routeIs('proveedores.index')">
+                {{ __('Proveedores') }}
             </x-jet-responsive-nav-link>
+
+            <x-jet-responsive-nav-link href="{{ route('servicios.index') }}" :active="request()->routeIs('servicios.index')">
+                {{ __('Servicios') }}
+            </x-jet-responsive-nav-link>
+
+
+            <x-jet-responsive-nav-link href="{{ route('categorias.index') }}" :active="request()->routeIs('categorias.index')">
+                {{ __('Categorias') }}
+            </x-jet-responsive-nav-link>
+
+
+                
+            <x-jet-responsive-nav-link href="{{ route('clientes.index') }}" :active="request()->routeIs('clientes.index')">
+                {{ __('Clientes') }}
+            </x-jet-responsive-nav-link>
+
+            <x-jet-responsive-nav-link href="{{ route('usuarios.index') }}" :active="request()->routeIs('usuarios.index')">
+                {{ __('Usuarios') }}
+            </x-jet-responsive-nav-link>
+
         </div>
 
         <!-- Responsive Settings Options -->

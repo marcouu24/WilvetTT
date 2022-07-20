@@ -5,6 +5,9 @@ use App\Models\DetalleVenta;
 use App\Models\DetalleServicio;
 use App\Models\Venta;
 use App\Models\Cliente;
+use App\Models\Ajuste;
+use Illuminate\Support\Facades\Auth;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Servicio;
 use App\Models\Producto;
@@ -59,6 +62,12 @@ class VentasController extends Controller
                         $detalleVentas= DetalleVenta::where('id_venta',  $request->id_venta) ->get();
 
                         foreach($detalleVentas as $detalleVentaEliminar){
+
+                            $producto= Producto::findOrFail($detalleVentaEliminar['id_producto']);
+                            $producto->stock=  $producto->stock + $detalleVentaEliminar['cantidad'];
+                            $producto->save();
+
+
                             $detalleVentaEliminar->delete();                           
                         }    
 
@@ -91,11 +100,15 @@ class VentasController extends Controller
                                     'id_venta' => $request->id_venta,                                                         
                                 ]);
                                 $totalProductos=$totalProductos+$productoVenta['total_detalle'];
+
+                                $producto= Producto::findOrFail($productoVenta['id_producto']);
+                                $producto->stock=  $producto->stock - $productoVenta['cantidad'];
+                                $producto->save();
                             }                           
                         }
 
 
-                        //RECORRER PRODUCTOS Y CREAR DETALLES VENTAS                      
+                        //RECORRER SERVICIOS Y CREAR DETALLES VENTAS                      
                         if ($request->servicios_venta != null){
                             
                             foreach($request->servicios_venta as $servicioVenta){
@@ -145,11 +158,15 @@ class VentasController extends Controller
                                     'id_venta' => $ultimoIdVenta,                                                         
                                 ]);
                                 $totalProductos=$totalProductos+$productoVenta['total_detalle'];
+
+                                $producto= Producto::findOrFail($productoVenta['id_producto']);
+                                $producto->stock=  $producto->stock - $productoVenta['cantidad'];
+                                $producto->save();
                             }                           
                         }
 
 
-                        //RECORRER PRODUCTOS Y CREAR DETALLES VENTAS                      
+                        //RECORRER SERVICIOS Y CREAR DETALLES VENTAS                      
                         if ($request->servicios_venta != null){
                             
                             foreach($request->servicios_venta as $servicioVenta){
@@ -200,7 +217,37 @@ class VentasController extends Controller
 
     public function eliminarVenta($id){
         try {
+           
+
+            $detalleVentas= DetalleVenta::where('id_venta',  $id) ->get();
+
+            foreach($detalleVentas as $detalleVentaEliminar){
+
+                $producto= Producto::findOrFail($detalleVentaEliminar['id_producto']);
+                $producto->stock=  $producto->stock + $detalleVentaEliminar['cantidad'];
+                $producto->save();
+
+
+                $ajuste = Ajuste::create([   
+                    'motivo' => 'Se ha eliminado la venta ID ' . $id . ', ' .  strval($detalleVentaEliminar['cantidad']) . ' Unidades añadidas',
+                    'stock' => $producto->stock,    
+                    'id_usuario' => Auth::user()->id,   
+                    'id_producto' => $detalleVentaEliminar['id_producto'],   
+                ]);           
+
+
+                $detalleVentaEliminar->delete();                           
+            }  
+            
+            $detalleServicios= DetalleServicio::where('id_venta',  $id) ->get();
+
+            foreach($detalleServicios as $detalleServiciosEliminar){
+                $detalleServiciosEliminar->delete();                           
+            } 
+
             Venta::find($id)->delete();
+
+            alert()->success('Exito','Venta eliminada correctamente.');
             return redirect()->route('ventas.index');
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar la venta, intente nuevamente');

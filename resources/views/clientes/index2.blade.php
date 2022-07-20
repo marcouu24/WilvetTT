@@ -6,7 +6,7 @@
 
 @section('call-to-action')
 @role('administrador')
-    <a href="" class="btn btn-danger text-white"><i class="fas fa-plus"></i> Agregar Cliente</a>
+    <a href="" class="btn btn-danger text-white"><i class="fas fa-plus"></i> Agregar Client2e</a>
 @endrole
 @endsection
 

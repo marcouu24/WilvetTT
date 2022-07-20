@@ -38,6 +38,7 @@
     $(function () {   
         var table = $('.yajra-datatable').DataTable({
             scrollY:        "700px",
+            order: [[0, 'desc']],
             scrollX:        true,
             scrollCollapse: true,
             processing: true,

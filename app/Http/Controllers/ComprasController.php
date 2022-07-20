@@ -5,6 +5,8 @@ use App\Models\Compra;
 use App\Models\DetalleCompra;
 use App\Models\Proveedor;
 use App\Models\Producto;
+use App\Models\DetalleVenta;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Ajuste;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
@@ -51,33 +53,64 @@ class ComprasController extends Controller
                         //RECORRER COSTOS Y ELIMINARLOS
                         $detalleCompras= DetalleCompra::where('id_compra',  $request->id_compra) ->get();
 
-                        foreach($detalleCompras as $detalleCompraEliminar){
-                            $detalleCompraEliminar->delete();                           
-                        }    
 
 
-
-                        $total=0;
-                        //RECORRER PRODUCTOS Y CREAR DETALLES COMPRAS
-                        
-                        if ($request->productos_compra != null){
+                        foreach($detalleCompras as $detalleCompras){
                             foreach($request->productos_compra as $productoCompra){
-                                $detalleCompra= DetalleCompra::create([                                    
-                                    'cantidad' => $productoCompra['cantidad'],
-                                    'total_detalle' => $productoCompra['total_detalle'],
-                                    'precio_unitario' => $productoCompra['precio_unitario'],                              
-                                    'id_producto' => $productoCompra['id_producto'],       
-                                    'id_compra' => $request->id_compra,                       
-                                ]);  
-                                $total=$total+$productoCompra['total_detalle'];                      
+
+                                if($detalleCompras['id_producto']==$productoCompra['id_producto']){
+                                    if($detalleCompras['cantidad']!=$productoCompra['cantidad']){
+
+                                        $producto= Producto::findOrFail($detalleCompras['id_producto']);
+                                        $producto->stock=  $producto->stock - $detalleCompras['cantidad'];
+                                        $producto->save();
+
+                                        $compra = Compra::findOrFail($request->id_compra);                                             
+                                        $compra->total_compra = $compra->total_compra - $detalleCompras['total_detalle'];        
+                                        $compra->save();                 
+
+
+                                        $detalleCompras->delete();   
+
+
+                                        $detalleCompra= DetalleCompra::create([                                    
+                                            'cantidad' => $productoCompra['cantidad'],
+                                            'total_detalle' => $productoCompra['total_detalle'],
+                                            'precio_unitario' => $productoCompra['precio_unitario'],                              
+                                            'id_producto' => $productoCompra['id_producto'],       
+                                            'id_compra' => $request->id_compra,                       
+                                        ]);  
+
+
+                                       
+                                       
+                                        $compra = Compra::findOrFail($request->id_compra);                                             
+                                        $compra->total_compra = $compra->total_compra + $productoCompra['total_detalle'];     
+                                        $compra->save();                              
+                                     
+                                      
+
+                                        $producto= Producto::findOrFail($productoCompra['id_producto']);
+                                        $producto->stock=  $producto->stock + $productoCompra['cantidad'];
+                                        $producto->save();
+
+
+
+                                        $ajuste = Ajuste::create([   
+                                            'motivo' => 'Se editó la compra ' . $request->id_compra .', ' .  strval($productoCompra['cantidad']) . ' Unidades añadidas.',
+                                            'stock' => $producto->stock,    
+                                            'id_usuario' => Auth::user()->id,   
+                                            'id_producto' => $productoCompra['id_producto'],   
+                                        ]);      
+                                        
+                                        
+                                    }
+                                }
                             }
+
                         }
 
 
-                        //ASIGNAR TOTAL RECIEN CALCULADO
-                        $compra = Compra::findOrFail($request->id_compra);                                             
-                        $compra->total_compra = $total;            
-                        $compra->save();                        
 
 
                     
@@ -162,7 +195,30 @@ class ComprasController extends Controller
 
     public function eliminarCompra($id){
         try {
+           
+            $detalleCompras= DetalleCompra::where('id_compra',  $id) ->get();
+
+            foreach($detalleCompras as $detalleCompraEliminar){
+
+                $producto= Producto::findOrFail($detalleCompraEliminar['id_producto']);
+                $producto->stock=  $producto->stock - $detalleCompraEliminar['cantidad'];
+                $producto->save();
+
+
+                $ajuste = Ajuste::create([   
+                    'motivo' => 'Se ha eliminado la compra ID ' . $id . ', ' .  strval($detalleCompraEliminar['cantidad']) . ' Unidades eliminadas',
+                    'stock' => $producto->stock,    
+                    'id_usuario' => Auth::user()->id,   
+                    'id_producto' => $detalleCompraEliminar['id_producto'],   
+                ]);           
+
+
+                $detalleCompraEliminar->delete();                           
+            }  
+
             Compra::find($id)->delete();
+
+
             return redirect()->route('compras.index');
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar la compra, intente nuevamente');

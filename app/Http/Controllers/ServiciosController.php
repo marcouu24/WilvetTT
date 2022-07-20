@@ -106,8 +106,14 @@ class ServiciosController extends Controller
     }
 
 
+
     public function listar(Request $request) 
     {     
+        function moneda($number, $prefix = '$ ', $decimals = 0)
+        {
+            return $prefix.number_format($number, $decimals, ',', '.');
+        }
+        
         if ($request->ajax()) {
             $data = Servicio::all();     
             return Datatables::of($data)
@@ -123,8 +129,17 @@ class ServiciosController extends Controller
                     </form>';
                     return $actionBtn;
                 
-            })                     
-            ->rawColumns(['action'])
+            })              
+            
+            ->addColumn('valor_servicio', function($servicio){
+               
+               return moneda($servicio->valor_servicio);
+            
+        })          
+
+
+            
+            ->rawColumns(['action','valor_servicio'])
             ->make(true);
         }
     }

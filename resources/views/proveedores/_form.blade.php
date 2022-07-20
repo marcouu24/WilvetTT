@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input maxlength="50" type="text" name="proveedor[nombre]" id="proveedor_nombre" placeholder="" value="{{old('proveedor.nombre',$proveedor->nombre)}}"
+                            <input maxlength="50" required type="text" name="proveedor[nombre]" id="proveedor_nombre" placeholder="" value="{{old('proveedor.nombre',$proveedor->nombre)}}"
                             class="form-control @error('nombre') is-invalid @enderror" >
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                         
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Correo</label>
-                            <input maxlength="50" type="text" name="proveedor[correo]" id="proveedor_correo" value="{{old('proveedor.correo',$proveedor->correo)}}"
+                            <input required maxlength="50" type="email" name="proveedor[correo]" id="proveedor_correo" value="{{old('proveedor.correo',$proveedor->correo)}}"
                             class="form-control @error('comuna') is-invalid @enderror" >
                             @error('comuna')
                             <span class="invalid-feedback" role="alert">
@@ -76,7 +76,7 @@
                 <div class="row">
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="nombre" class="form-label">Teléfono</label>
-                        <input maxlength="9" type="text" name="proveedor[telefono]" id="proveedor_telefono" value="{{old('proveedor.telefono',$proveedor->telefono)}}"
+                        <input maxlength="9" required type="text" name="proveedor[telefono]" id="proveedor_telefono" value="{{old('proveedor.telefono',$proveedor->telefono)}}"
                         class="form-control @error('telefono') is-invalid @enderror" >
                         @error('telefono')
                         <span class="invalid-feedback" role="alert">

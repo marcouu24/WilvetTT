@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input maxlength="50" type="text" name="producto[nombre]" id="producto_nombre" placeholder="" value="{{old('producto.nombre',$producto->nombre)}}"
+                            <input required maxlength="30" type="text" name="producto[nombre]" id="producto_nombre" placeholder="" value="{{old('producto.nombre',$producto->nombre)}}"
                             class="form-control @error('nombre') is-invalid @enderror" >
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                         
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="precio_venta" class="form-label">Precio Venta</label>
-                            <input maxlength="50" type="number" name="producto[precio_venta]" id="producto_precio_venta" value="{{old('producto.precio_venta',$producto->precio_venta)}}"
+                            <input required max="99999999999"  type="number" name="producto[precio_venta]" id="producto_precio_venta" value="{{old('producto.precio_venta',$producto->precio_venta)}}"
                             class="form-control @error('precio') is-invalid @enderror" >
                             @error('precio')
                             <span class="invalid-feedback" role="alert">
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="producto[stock]" class="form-label">Stock</label>
-                        <input maxlength="10" type="text" name="producto[stock]" id="producto_stock" value="{{old('producto.stock',$producto->stock)}}"
+                        <input max="99999" required type="number" name="producto[stock]" id="producto_stock" value="{{old('producto.stock',$producto->stock)}}"
                         class="form-control @error('stock') is-invalid @enderror" required>
                         @error('stock')
                         <span class="invalid-feedback" role="alert">
@@ -110,9 +110,14 @@
 
 @include('sweetalert::alert') 
 
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
+
+$('#producto_id_categoria').select2();
+
+
     $('#btn-eliminar').on('click', function(e){
     e.preventDefault();
     Swal.fire({

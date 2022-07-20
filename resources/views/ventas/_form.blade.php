@@ -198,7 +198,7 @@
                                             </select> 
                                         </td>
 
-                                        <td><input type="number" name="servicios_venta[{{$detalle_servicio->id}}][cantidad]" data-id-detalle-servicio={{$detalle_servicio->id}}  id="servicios_venta_cantidad{{$detalle_servicio->id}}" value="{{$detalle_servicio->cantidad}}" class="form-control servicios_venta_cantidad text-end" ></td>
+                                        <td><input type="number" min="1" name="servicios_venta[{{$detalle_servicio->id}}][cantidad]" data-id-detalle-servicio={{$detalle_servicio->id}}  id="servicios_venta_cantidad{{$detalle_servicio->id}}" value="{{$detalle_servicio->cantidad}}" class="form-control servicios_venta_cantidad text-end" ></td>
                                         <td><input type="text" name="servicios_venta[{{$detalle_servicio->id}}][total_detalle]" readonly id="servicios_venta_total_detalle{{$detalle_servicio->id}}" value="{{moneda($detalle_servicio->total_detalle)}}" class="form-control total_detalle text-end" ></td>
                                        
                                         <input type="hidden"  name="servicios_venta[{{$detalle_servicio->id}}][id_venta]" value="{{$detalle_servicio->id_venta}}">
@@ -388,6 +388,8 @@ marcados.splice(myIndex, 1);
             } 
        }    
    };
+
+
 
 
    function calcularTotalVenta(){

@@ -41,6 +41,7 @@
         var table = $('.yajra-datatable').DataTable({
             scrollY:        "700px",
             scrollX:        true,
+            order: [[0, 'desc']],
             scrollCollapse: true,
             processing: true,
             serverSide: true,

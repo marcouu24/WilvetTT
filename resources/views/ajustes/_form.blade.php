@@ -44,7 +44,8 @@
                                     <div class="mb-3">
                                         <label for="proveedor_id">Producto</label>      
                                        
-                                        <select class="select2-select" style="width: 100%" name="producto_ajuste[id_producto]" id="producto_ajuste_id_producto"> 
+                                        <select class="select2-select" required style="width: 100%" name="producto_ajuste[id_producto]" id="producto_ajuste_id_producto"> 
+                                            <option value="">--SELECCIONAR--</option>
                                             @foreach ($productos as $producto)  
                                             <option data-stock={{ $producto['stock'] }} value="{{ $producto['id'] }}">{{ $producto['nombre'] }}</option> 
                                             @endforeach 
@@ -56,7 +57,7 @@
                                         <div class="row">
                                             <div class="mb-md-3 mb-2 mt-3 ">
                                                 <label for="producto[stock]" class="form-label">Nuevo Stock</label>
-                                                <input maxlength="10" type="text" name="producto_ajuste[stock]" id="producto_stock" value=""
+                                                <input max="99999" required type="number" name="producto_ajuste[stock]" id="producto_stock" value=""
                                                 class="form-control @error('stock') is-invalid @enderror" required>
                                                 @error('stock')
                                                 <span class="invalid-feedback" role="alert">
@@ -76,7 +77,7 @@
                                 <div class=" col-sm-9">
                                     <div class="mb-3">
                                         <label for="nombre">Motivo del ajuste</label>                   
-                                        <textarea maxlength="110" rows="10" name="producto_ajuste[motivo]" id="servicios_observaciones" class="form-control"></textarea>
+                                        <textarea maxlength="110" rows="10" required name="producto_ajuste[motivo]" id="servicios_observaciones" class="form-control"></textarea>
                                     </div>
                                 </div>
                                 

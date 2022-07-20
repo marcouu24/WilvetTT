@@ -83,4 +83,66 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        var datos = [];
+var nombres = [];
+@foreach ($DetallesVentas as $detalleVenta)
+    datos.push({{$detalleVenta->cantidad}});
+    nombres.push("{{$detalleVenta->nombre}}");
+@endforeach
+const ctx2 = document.getElementById('myChart2').getContext('2d');
+crearGraficoCircular(ctx2, datos, nombres);
+
+
+
+function crearGraficoCircular(ctx, datos, nombres){
+    const myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: nombres,
+            datasets: [{
+                data: datos,
+                backgroundColor: [
+                    '#0A1840',
+                    '#A91035',
+                    '#CD5506',
+                    '#000033',
+                    '#7B0007'
+                ],
+                hoverOffset: 2
+            }]
+        },
+        options:{
+            maintainAspectRatio: false,
+            plugins: {
+                legend:{
+                    position: 'right'
+                },
+                tooltip:{
+                    enabled: false
+                },
+                datalabels: {
+                    color: '#FFF',
+                    formatter: (value, context) =>{
+                        const datapoints = context.chart.data.datasets[0].data;
+                        function totalSum(total, datapoint){
+                            return total + datapoint;
+                        }
+                        const totalValor = datapoints.reduce(totalSum, 0);
+                        const valorPorcentaje = (value /totalValor * 100).toFixed(0);
+                        return valorPorcentaje +"%";
+                    }
+                }
+            },
+
+        },
+        plugins: [ChartDataLabels]
+    });
+}
+
+
+
+    </script>
 </x-app-layout>

@@ -5,7 +5,7 @@
     <div class="row">
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
-            <a href="{{route('ventas.crear')}}" class="btn btn-danger float-left text-white"><i class="fas fa-plus text- float-left right"></i>Registrar Venta</a>
+            <a href="{{route('usuarios.crear')}}" class="btn btn-danger float-left text-white"><i class="fas fa-plus text- float-left right"></i> Agregar Usuario</a>
           </div>
 
 
@@ -19,11 +19,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>RUT Cliente</th>
-                        <th>Fecha Venta</th>
-                        <th>Total Venta</th>
-                        <th>Usuario</th>
-                        <th>Acciones</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Correo</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -36,25 +35,23 @@
 @section("javascript")
 
 
+@include('sweetalert::alert') 
 
 <script>
     $(function () {   
         var table = $('.yajra-datatable').DataTable({
             scrollY:        "700px",
             scrollX:        true,
-            order: [[0, 'desc']],
             scrollCollapse: true,
+            order: [[0, 'desc']],
             processing: true,
             serverSide: true,
             
-            ajax: "{{ route('ventas.listar') }}",
+            ajax: "{{ route('usuarios.listar') }}",
             columns: [
-            {data: 'id', name: 'id',className: 'dt-right'},
-            {data: 'rut_cliente', name: 'rut_cliente',className: 'dt-right'},      
-            {data: 'fecha_venta', name: 'fecha_venta' ,className: 'dt-right'},    
-            {data: 'total_venta', name: 'total_venta',className: 'dt-right'},    
-            {data: 'usuario', name: 'usuario',className: 'dt-right'}, 
-           
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},      
+            {data: 'email', name: 'email'},    
             
             {
                 data: 'action', 
@@ -97,8 +94,6 @@
  
 <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/4.0.2/js/dataTables.fixedColumns.js"></script>
-
-
 
 
 

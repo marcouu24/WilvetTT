@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input maxlength="50" type="text" name="servicio[nombre]" id="servicio_nombre" placeholder="" value="{{old('servicio.nombre',$servicio->nombre)}}"
+                            <input maxlength="30" required type="text" name="servicio[nombre]" id="servicio_nombre" placeholder="" value="{{old('servicio.nombre',$servicio->nombre)}}"
                             class="form-control @error('nombre') is-invalid @enderror" >
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">
@@ -43,8 +43,8 @@
                         </div>       
                         
                         <div class="mb-md-3 mb-2 mt-3 ">
-                            <label for="descripcion" class="form-label">Descripcion</label>
-                            <input maxlength="50" type="text" name="servicio[descripcion]" id="servicio_descripcion" value="{{old('servicio.descripcion',$servicio->descripcion)}}"
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input maxlength="50" required type="text" name="servicio[descripcion]" id="servicio_descripcion" value="{{old('servicio.descripcion',$servicio->descripcion)}}"
                             class="form-control @error('comuna') is-invalid @enderror" >
                             @error('comuna')
                             <span class="invalid-feedback" role="alert">
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="servicio[valor_servicio]" class="form-label">Valor Servicio</label>
-                        <input maxlength="10" type="text" name="servicio[valor_servicio]" id="servicio_valor_servicio" value="{{old('servicio.valor_servicio',$servicio->valor_servicio)}}"
+                        <input min="1" max="99999999" required type="number" name="servicio[valor_servicio]" id="servicio_valor_servicio" value="{{old('servicio.valor_servicio',$servicio->valor_servicio)}}"
                         class="form-control @error('valor') is-invalid @enderror" required>
                         @error('valor')
                         <span class="invalid-feedback" role="alert">

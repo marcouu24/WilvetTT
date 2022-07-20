@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input maxlength="50" type="text" name="categoria[nombre]" id="categoria_nombre" placeholder="" value="{{old('categoria.nombre',$categoria->nombre)}}"
+                            <input maxlength="30" required type="text" name="categoria[nombre]" id="categoria_nombre" placeholder="" value="{{old('categoria.nombre',$categoria->nombre)}}"
                             class="form-control @error('nombre') is-invalid @enderror" >
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">

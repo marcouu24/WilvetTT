@@ -5,6 +5,7 @@ use App\Http\Requests\ClientesRequest;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Producto;
+use RealRashid\SweetAlert\Facades\Alert;
 
 use DataTables;
 class ClientesController extends Controller
@@ -41,10 +42,17 @@ class ClientesController extends Controller
     
     public function guardarCliente(ClientesRequest $request)
     {
-      
+
+
         try{
-            if ( Cliente::where('rut',$request->cliente['rut'])->exists() ) {       
-                        
+            if ( $request->id ) {
+                $cliente_existente = Cliente::where('rut', $request->cliente['rut'])->first();
+
+                if($cliente_existente != null && $cliente_existente->rut != $request->id){
+                    alert()->error('Error','Ya exite un cliente con ese RUT');
+                    return redirect()->back()->withInput();
+                }
+                
                 $cliente = Cliente::where('rut',$request->cliente['rut'])->first();
                 $cliente->rut = $request->cliente['rut'];
                 $cliente->nombre = $request->cliente['nombre'];
@@ -53,18 +61,29 @@ class ClientesController extends Controller
                 $cliente->telefono = $request->cliente['telefono'];
                 $cliente->email = $request->cliente['email'];
                 $cliente->save();
+
+
             }else{
-                $cliente = Cliente::create( $request->cliente );
+                $cliente = Cliente::where('rut', $request->cliente['rut'])->first();
+                if($cliente == null){
+                    $cliente = Cliente::create( $request->cliente );
+                }
+                else{
+                    alert()->error('Error','Ya exite un cliente con ese RUT');
+                    return redirect()->back()->withInput();
+                }
             } 
-             Alert()->success('¡Éxito!','Cliente guardado satisfactoriamente'); 
+            alert()->success('¡Éxito!','Cliente guardado satisfactoriamente');
             return redirect(route('clientes.index'));
         }catch(Exception $e){
-          
-            Alert()->error('Error','No se pueden guardar los datos, intente nuevamente'); 
-            report($e);
-            dd($e);
+            alert()->error('Error','No se pudo guardar el cliente, intente nuevamente');
+           
             return redirect()->back()->withInput();
         }
+
+
+      
+        
     }
 
 

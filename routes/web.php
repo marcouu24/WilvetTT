@@ -30,6 +30,14 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'] )->name('usuarios.index');
+Route::get('/usuarios/crear', [App\Http\Controllers\UsuariosController::class, 'crearUsuario'] )->name('usuarios.crear');
+Route::post('/usuarios/guardar', [App\Http\Controllers\UsuariosController::class, 'guardarUsuario'])->name('usuarios.guardar');
+Route::get('/usuarios/listar', [App\Http\Controllers\UsuariosController::class, 'listar'] )->name('usuarios.listar');
+Route::get('/usuarios/editar/{id}', [App\Http\Controllers\UsuariosController::class, 'editarUsuario'] )->name('usuarios.editar');
+Route::delete('/usuarios/eliminar/{id}', [App\Http\Controllers\UsuariosController::class, 'eliminarUsuario'])->name('usuarios.eliminar');
+
+
 
 Route::get('/clientes', [App\Http\Controllers\ClientesController::class, 'index'] )->name('clientes.index');
 Route::get('/clientes/crear', [App\Http\Controllers\ClientesController::class, 'crearCliente'] )->name('clientes.crear');
