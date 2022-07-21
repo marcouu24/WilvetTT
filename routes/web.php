@@ -26,9 +26,11 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('tablero');
+        return view('panel');
     })->name('dashboard');
 });
+
+Route::middleware(['auth'])->group(function () {
 
 Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'] )->name('usuarios.index');
 Route::get('/usuarios/crear', [App\Http\Controllers\UsuariosController::class, 'crearUsuario'] )->name('usuarios.crear');
@@ -108,3 +110,4 @@ Route::post('/ajustes/guardar', [App\Http\Controllers\AjustesController::class, 
 
 
 Route::get('/panel', [App\Http\Controllers\PanelController::class, 'index'] )->name('panel');
+});
