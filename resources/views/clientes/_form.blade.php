@@ -47,7 +47,7 @@
 
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input maxlength="50" required type="text" name="cliente[nombre]" id="cliente_nombre" placeholder="" value="{{old('cliente.nombre',$cliente->nombre)}}"
+                        <input maxlength="30" required type="text" name="cliente[nombre]" id="cliente_nombre" placeholder="" value="{{old('cliente.nombre',$cliente->nombre)}}"
                         class="form-control @error('nombre') is-invalid @enderror" >
                         @error('nombre')
                         <span class="invalid-feedback" role="alert">

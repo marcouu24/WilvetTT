@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Proveedor;
 use RealRashid\SweetAlert\Facades\Alert;
 use DataTables;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProveedoresController extends Controller
@@ -97,8 +98,10 @@ class ProveedoresController extends Controller
     public function eliminarProveedor($id){
         try {
             Proveedor::find($id)->delete();
+            alert()->success('Éxito','Proveedor eliminado correctamente.');
             return redirect()->route('proveedores.index');
         } catch (Exception $e) {
+            
             alert()->error('Error','No se pudo eliminar el proveedor, intente nuevamente');
             report($e);
             return redirect()->back();

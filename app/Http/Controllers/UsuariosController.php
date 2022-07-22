@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\UsuariosRequest;
 use App\Models\User;
@@ -23,6 +23,7 @@ class UsuariosController extends Controller
         }catch(Exception $e){
             report($e);
             alert()->error('Error','No se pudo eliminar el usuario, intente nuevamente');
+            return redirect()->back();
         }
     }
 
@@ -50,15 +51,18 @@ class UsuariosController extends Controller
       
 
         try{
+            
             if ( $request->id ) {
                 $usuario_existente = User::where('id', $request->id)->first();
-                $usuario_existenteCorreo='';
+               
+                $usuario_existenteCorreo='a';
                 
                 $usuario_existenteCorreo = User::where('email', $request->usuario['email'])->first();
+               
 
                 if($usuario_existenteCorreo!=''){
-                    if($usuario_existente != null && !$usuario_existenteCorreo->id !=  $request->id){
-                        alert()->error('Error','Ya exite un usuario con ese correo');
+                    if($usuario_existente != null && $usuario_existenteCorreo->id !=  $request->id){
+                        alert()->error('Error','Ya exite un usuario con ese correooo');
                         return redirect()->back()->withInput();
                     }
                 }

@@ -57,7 +57,7 @@
                                         <div class="row">
                                             <div class="mb-md-3 mb-2 mt-3 ">
                                                 <label for="producto[stock]" class="form-label">Nuevo Stock</label>
-                                                <input max="99999" required type="number" name="producto_ajuste[stock]" id="producto_stock" value=""
+                                                <input max="9999" required type="number" name="producto_ajuste[stock]" id="producto_stock" value=""
                                                 class="form-control @error('stock') is-invalid @enderror" required>
                                                 @error('stock')
                                                 <span class="invalid-feedback" role="alert">

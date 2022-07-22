@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\DetalleVenta;
 use App\Models\DetalleServicio;
 use App\Models\Venta;
+use Exception;
 use App\Models\Cliente;
 use App\Models\Ajuste;
 use Illuminate\Support\Facades\Auth;

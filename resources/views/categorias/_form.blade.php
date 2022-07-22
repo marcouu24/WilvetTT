@@ -95,7 +95,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $('#form').append('<input type="hidden" name="_method" value="delete">');
-                $('#form').attr('action', "{{route('clientes.eliminar', '')}}"+"/"+$(this).data('cliente_id'));
+                $('#form').attr('action', "{{route('categorias.eliminar', '')}}"+"/"+$(this).data('categoria_id'));
                 $('#form').submit();
             }
             else{

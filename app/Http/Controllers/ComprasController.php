@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Compra;
+use Exception;
 use App\Models\DetalleCompra;
 use App\Models\Proveedor;
 use App\Models\Producto;
@@ -97,7 +98,7 @@ class ComprasController extends Controller
 
 
                                         $ajuste = Ajuste::create([   
-                                            'motivo' => 'Se editó la compra ' . $request->id_compra .', ' .  strval($productoCompra['cantidad']) . ' Unidades añadidas.',
+                                            'motivo' => 'Se editó la compra ID' . $request->id_compra .', ' .  strval($productoCompra['cantidad']) . ' Unidades añadidas.',
                                             'stock' => $producto->stock,    
                                             'id_usuario' => Auth::user()->id,   
                                             'id_producto' => $productoCompra['id_producto'],   
@@ -218,7 +219,7 @@ class ComprasController extends Controller
 
             Compra::find($id)->delete();
 
-
+            alert()->success('Exito','Compra eliminada correctamente.');
             return redirect()->route('compras.index');
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar la compra, intente nuevamente');

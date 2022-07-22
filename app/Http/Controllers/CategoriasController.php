@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Categoria;
+use Exception;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -95,6 +96,7 @@ class CategoriasController extends Controller
     public function eliminarCategoria($id){
         try {
             Categoria::find($id)->delete();
+            alert()->success('Éxito','Categoría eliminada correctamente.');
             return redirect()->route('categorias.index');
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar la categoría, intente nuevamente');

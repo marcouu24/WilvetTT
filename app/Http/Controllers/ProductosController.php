@@ -6,6 +6,7 @@ use App\Models\Categoria;
 use RealRashid\SweetAlert\Facades\Alert;
 use DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductosController extends Controller
@@ -99,7 +100,9 @@ class ProductosController extends Controller
     public function eliminarProducto($id){
         try {
             Producto::find($id)->delete();
+            alert()->success('Éxito','Producto eliminado correctamente.');
             return redirect()->route('productos.index');
+            
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar el producto, intente nuevamente');
             report($e);

@@ -51,7 +51,7 @@
 
                     <div class="card shadow mb-3">
                         <div class="card-header">
-                            <h4>Datos Compra</h4>
+                            <h4>Datos Venta</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -965,7 +965,7 @@ if(document.getElementById('servicios_venta_cantidad'+idDetalleVenta).value!='')
         }).then((result) => {
             if (result.isConfirmed) {
                 $('#form').append('<input type="hidden" name="_method" value="delete">');
-                $('#form').attr('action', "{{route('compras.eliminar', '')}}"+"/"+$(this).data('venta_id'));
+                $('#form').attr('action', "{{route('ventas.eliminar', '')}}"+"/"+$(this).data('venta_id'));
                 $('#form').submit();
             }
             else{

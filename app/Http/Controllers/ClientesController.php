@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientesRequest;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use Exception;
 use App\Models\Producto;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -124,10 +125,12 @@ class ClientesController extends Controller
     public function eliminarCliente($rut){
         try{
             Cliente::where('rut',$rut)->delete();
+            alert()->success('Éxito','Cliente eliminado correctamente.');
             return redirect()->route('clientes.index');
         }catch(Exception $e){
             report($e);
             alert()->error('Error','No se pudo eliminar el cliente, intente nuevamente');
+            return redirect()->back();
         }
     }
 }

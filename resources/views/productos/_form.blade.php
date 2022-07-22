@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input required maxlength="30" type="text" name="producto[nombre]" id="producto_nombre" placeholder="" value="{{old('producto.nombre',$producto->nombre)}}"
+                            <input required maxlength="50" type="text" name="producto[nombre]" id="producto_nombre" placeholder="" value="{{old('producto.nombre',$producto->nombre)}}"
                             class="form-control @error('nombre') is-invalid @enderror" >
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">
@@ -44,7 +44,7 @@
                         
                         <div class="mb-md-3 mb-2 mt-3 ">
                             <label for="precio_venta" class="form-label">Precio Venta</label>
-                            <input required max="99999999999"  type="number" name="producto[precio_venta]" id="producto_precio_venta" value="{{old('producto.precio_venta',$producto->precio_venta)}}"
+                            <input required max="99999999"  type="number" name="producto[precio_venta]" id="producto_precio_venta" value="{{old('producto.precio_venta',$producto->precio_venta)}}"
                             class="form-control @error('precio') is-invalid @enderror" >
                             @error('precio')
                             <span class="invalid-feedback" role="alert">
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="mb-md-3 mb-2 mt-3 ">
                         <label for="producto[stock]" class="form-label">Stock</label>
-                        <input max="99999" required type="number" name="producto[stock]" id="producto_stock" value="{{old('producto.stock',$producto->stock)}}"
+                        <input max="9999" required type="number" name="producto[stock]" id="producto_stock" value="{{old('producto.stock',$producto->stock)}}"
                         class="form-control @error('stock') is-invalid @enderror" required>
                         @error('stock')
                         <span class="invalid-feedback" role="alert">

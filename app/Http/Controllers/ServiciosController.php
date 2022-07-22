@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Servicio;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -97,6 +97,7 @@ class ServiciosController extends Controller
     public function eliminarServicio($id){
         try {
             Servicio::find($id)->delete();
+            alert()->success('Éxito','Servicio eliminado correctamente.');
             return redirect()->route('servicios.index');
         } catch (Exception $e) {
             alert()->error('Error','No se pudo eliminar el servicio, intente nuevamente');
